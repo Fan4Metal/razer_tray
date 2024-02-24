@@ -106,8 +106,12 @@ def get_battery():
     usb.util.dispose_resources(mouse)
     usb.util.release_interface(mouse, 0)
     logging.info(f"Message received from the mouse: {list(result)}")
-    # the raw battery level is in 0 - 255, scale it to 100 for human, return integer number
-    return f"{int(result[9] / 255 * 100)}"
+    # The raw battery level is in 0 - 255, scale it to 100 for human, return integer number
+    # It looks like if wireless mouse is in sleep mode, it returns "0". So we show "Zzz" indicator.
+    if int(result[9] / 255 * 100) == 0:
+        return "Zzz"
+    else:
+        return f"{int(result[9] / 255 * 100)}"
 
 
 def create_icon(text: str, color):
