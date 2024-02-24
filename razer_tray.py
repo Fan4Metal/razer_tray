@@ -145,6 +145,7 @@ class MyTaskBarIcon(TaskBarIcon):
     def __init__(self, frame):
         super().__init__()
         self.frame = frame
+        self.Bind(wx.adv.EVT_TASKBAR_LEFT_DOWN, self.OnClick)
 
     def CreatePopupMenu(self):
         menu = wx.Menu()
@@ -164,6 +165,13 @@ class MyTaskBarIcon(TaskBarIcon):
         self.Destroy()
         self.frame.Destroy()
 
+    def OnClick(self, event):
+        if self.frame.battery == "Zzz":
+            self.frame.battery = get_battery()
+            logging.info(f"Battery level obtained: {self.frame.battery}")
+            self.frame.tray_icon.SetIcon(create_icon(self.frame.battery, foreground_color),
+                                         "No Mouse Detected" if self.frame.battery == "-" else MODEL)
+
 
 class MyFrame(wx.Frame):
 
@@ -171,9 +179,9 @@ class MyFrame(wx.Frame):
         super().__init__(parent, title=title, pos=(-1, -1), size=(290, 280))
         self.SetSize((350, 250))
         self.tray_icon = MyTaskBarIcon(self)
-        battery = get_battery()
-        logging.info(f"Battery level obtained: {battery}")
-        self.tray_icon.SetIcon(create_icon(battery, foreground_color), "No Mouse Detected" if battery == "-" else MODEL)
+        self.battery = get_battery()
+        logging.info(f"Battery level obtained: {self.battery}")
+        self.tray_icon.SetIcon(create_icon(self.battery, foreground_color), "No Mouse Detected" if self.battery == "-" else MODEL)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
         self.Centre()
 
@@ -187,9 +195,9 @@ class MyFrame(wx.Frame):
     def Polling(self):
         while True:
             time.sleep(poll_rate)
-            battery = get_battery()
-            logging.info(f"Battery level obtained: {battery}")
-            self.tray_icon.SetIcon(create_icon(battery, foreground_color), "No Mouse Detected" if battery == "-" else MODEL)
+            self.battery = get_battery()
+            logging.info(f"Battery level obtained: {self.battery}")
+            self.tray_icon.SetIcon(create_icon(self.battery, foreground_color), "No Mouse Detected" if self.battery == "-" else MODEL)
 
 
 class MyApp(wx.App):
