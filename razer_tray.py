@@ -38,7 +38,8 @@ def get_mouse():
     (2) a boolean for stating if the mouse is in wireless state (True) or wired state (False)
     """
     # declare backend: libusb1.0
-    backend = libusb1.get_backend()
+    backend = libusb1.get_backend(find_library=lambda x: R".\libusb-1.0.dll")
+    logging.info(f"backend: {backend}")
     # find the mouse by PyUSB
     mouse = usb.core.find(idVendor=0x1532, idProduct=WIRELESS_RECEIVER, backend=backend)
     # if the receiver is not found, mouse would be None
