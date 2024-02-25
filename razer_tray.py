@@ -27,6 +27,7 @@ YELLOW = (255, 255, 0)
 poll_rate = 30
 foreground_color = GREEN
 backgroung_color = (0, 0, 0, 0)
+font = "consola.ttf"
 
 logging.basicConfig(level=logging.INFO)
 
@@ -115,7 +116,7 @@ def get_battery():
         return f"{int(result[9] / 255 * 100)}"
 
 
-def create_icon(text: str, color):
+def create_icon(text: str, color, font):
 
     # Convert PIL Image to wxPython Bitmap
     def PIL2wx(image):
@@ -135,7 +136,7 @@ def create_icon(text: str, color):
     I1 = ImageDraw.Draw(image)
     # Custom font style and font size
     text_pos, size = get_text_pos_size(text)
-    myFont = ImageFont.truetype('consola.ttf', size)
+    myFont = ImageFont.truetype(font, size)
     # Add Text to an image
     I1.text(text_pos, text, font=myFont, fill=color)
     return PIL2wx(image)
@@ -168,10 +169,7 @@ class MyTaskBarIcon(TaskBarIcon):
 
     def OnClick(self, event):
         if self.frame.battery == "Zzz":
-            self.frame.battery = get_battery()
-            logging.info(f"Battery level obtained: {self.frame.battery}")
-            self.frame.tray_icon.SetIcon(create_icon(self.frame.battery, foreground_color),
-                                         "No Mouse Detected" if self.frame.battery == "-" else MODEL)
+            self.frame.show_battery()
 
 
 class MyFrame(wx.Frame):
@@ -194,7 +192,7 @@ class MyFrame(wx.Frame):
     def show_battery(self):
         self.battery = get_battery()
         logging.info(f"Battery level obtained: {self.battery}")
-        self.tray_icon.SetIcon(create_icon(self.battery, foreground_color), "No Mouse Detected" if self.battery == "-" else MODEL)
+        self.tray_icon.SetIcon(create_icon(self.battery, foreground_color, font), "No Mouse Detected" if self.battery == "-" else MODEL)
 
     def thread_worker(self):
         while True:
