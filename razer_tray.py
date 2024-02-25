@@ -180,25 +180,26 @@ class MyFrame(wx.Frame):
         super().__init__(parent, title=title, pos=(-1, -1), size=(290, 280))
         self.SetSize((350, 250))
         self.tray_icon = MyTaskBarIcon(self)
-        self.battery = get_battery()
-        logging.info(f"Battery level obtained: {self.battery}")
-        self.tray_icon.SetIcon(create_icon(self.battery, foreground_color), "No Mouse Detected" if self.battery == "-" else MODEL)
+        self.show_battery()
         self.Bind(wx.EVT_CLOSE, self.OnClose)
         self.Centre()
 
-        self.thread = threading.Thread(target=self.Polling, daemon=True)
+        self.thread = threading.Thread(target=self.thread_worker, daemon=True)
         self.thread.start()
 
     def OnClose(self, event):
         if self.IsShown():
             self.Hide()
 
-    def Polling(self):
+    def show_battery(self):
+        self.battery = get_battery()
+        logging.info(f"Battery level obtained: {self.battery}")
+        self.tray_icon.SetIcon(create_icon(self.battery, foreground_color), "No Mouse Detected" if self.battery == "-" else MODEL)
+
+    def thread_worker(self):
         while True:
             time.sleep(poll_rate)
-            self.battery = get_battery()
-            logging.info(f"Battery level obtained: {self.battery}")
-            self.tray_icon.SetIcon(create_icon(self.battery, foreground_color), "No Mouse Detected" if self.battery == "-" else MODEL)
+            self.show_battery()
 
 
 class MyApp(wx.App):
