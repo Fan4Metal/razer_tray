@@ -151,3 +151,4 @@ list*
 
 # exlude
 !requirements.txt
+!images/screenshot.png

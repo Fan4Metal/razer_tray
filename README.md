@@ -1,6 +1,7 @@
 # Razer Tray Charge Notification
 
 ## Introduction
+![Screenshot](images/screenshot.png)<br>
 
 This is a script for **Windows** written in Python 3.10+ with `wxPython` and `pyusb` that gets the battery level of a Razer Wireless mouse (Razer Viper V2 Pro by default) and shows it in system tray.<br>
 
