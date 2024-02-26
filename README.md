@@ -23,7 +23,7 @@ You can find VID:PID pairs [here](https://github.com/openrazer/openrazer?tab=rea
 
 > Go to Device Manager -> Find your mouse -> Right click -> Properties -> Details -> Hardware Ids -> Repeat in the other state
   * e.g. for **Razer Viper V2 Pro**, in wireless state, the entries of Hardware Ids contain `VID_1532&PID_00A6`, then 0x00A6 is the PID in the wireless state
-  * In wired state, the entries contain `VID_1532&PID_00A5`, then 0x00A6 is the PID in the wired state
+  * In wired state, the entries contain `VID_1532&PID_00A5`, then 0x00A5 is the PID in the wired state
 2. Get `transaction_id.id` for your mouse from [here](https://github.com/openrazer/openrazer/blob/85e81ae3ba08f2af33031e8a08a4f0ecc6adee91/driver/razermouse_driver.c#L1132)
 3. If the name of your mouse appears inside the switch statement, write down the `transaction_id.id`
   * e.g., I see `USB_DEVICE_ID_RAZER_VIPER_V2_PRO_WIRELESS` inside the switch statement, so the `transaction_id.id` for my mouse is `0x1f`
