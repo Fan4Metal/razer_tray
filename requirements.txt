@@ -1,2 +1,2 @@
-wxPython
-pyusb
+wxPython==4.2.1
+pyusb==1.2.1
