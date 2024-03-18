@@ -26,7 +26,7 @@ YELLOW = (255, 255, 0)
 # Settings
 poll_rate = 30
 foreground_color = GREEN
-backgroung_color = (0, 0, 0, 0)
+background_color = (0, 0, 0, 0)
 font = "consola.ttf"
 
 logging.basicConfig(level=logging.INFO)
@@ -57,7 +57,7 @@ def get_mouse():
     else:
         wireless = True
 
-    return [mouse, wireless]
+    return mouse, wireless
 
 
 def battery_msg():
@@ -81,12 +81,12 @@ def battery_msg():
 
 def get_battery():
     """
-    Function for getting the battery level of a Razer Mamba Wireless, or other device if adapted
+    Function for getting the battery level of a Razer Wireless mouse, or other device if adapted
     :return: a string with the battery level as a percentage (0 - 100)
     """
     # find the mouse and the state, see get_mouse() for detail
     try:
-        [mouse, wireless] = get_mouse()
+        mouse, wireless = get_mouse()
     except RuntimeError as e:
         return "-"
     # the message to be sent to the mouse, see battery_msg() for detail
@@ -131,7 +131,7 @@ def create_icon(text: str, color, font):
         elif len(text) == 1:
             return (34, 16), 110
 
-    image = Image.new(mode="RGBA", size=(128, 128), color=backgroung_color)
+    image = Image.new(mode="RGBA", size=(128, 128), color=background_color)
     # Call draw Method to add 2D graphics in an image
     I1 = ImageDraw.Draw(image)
     # Custom font style and font size
